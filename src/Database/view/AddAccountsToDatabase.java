@@ -28,7 +28,7 @@ public class AddAccountsToDatabase implements MenuItem {
         this.accountList = accountList;
         URL = "jdbc:derby://localhost:1527/CRM";
     }
-
+  
     // Constructor takes current AccountList and URL
     public AddAccountsToDatabase(AccountList accountList, String URL) {
         this.accountList = accountList;
@@ -68,7 +68,8 @@ public class AddAccountsToDatabase implements MenuItem {
                 // If it does not exist then insert account
                 if (!(res.next())) {
                     int amount = account.getAmount();
-                    // Convert closeDate to milliseconds
+
+                  // Convert closeDate to milliseconds
                     int closeDate = (int) account.getCloseDate().getTimeInMillis();
                     String accountName = account.getAccountName();
                     ContactsList contactsList = account.getContactsList();
