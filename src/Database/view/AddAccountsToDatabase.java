@@ -28,7 +28,7 @@ public class AddAccountsToDatabase implements MenuItem {
         this.accountList = accountList;
         URL = "jdbc:derby://localhost:1527/CRM";
     }
-  
+
     // Constructor takes current AccountList and URL
     public AddAccountsToDatabase(AccountList accountList, String URL) {
         this.accountList = accountList;
