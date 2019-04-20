@@ -1,33 +1,64 @@
 package Database.view;
 
 import Menu.MenuItem;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Scanner;
 
 /**
  *
- * @author kenny
- * Deletes account from database using a given account name.
+ * @author kenny Deletes account from database using a given account name.
  */
 public class DeleteAccountDatabase implements MenuItem {
 
     // URL to where database is created
     private String URL;
-    private String accountName;
+    private int accountId;
 
-    // Constructor sets default URL and accepts accountName
-    public DeleteAccountDatabase(String accountName) {
+    // Constructor sets default URL and accepts accountId
+    public DeleteAccountDatabase(int accountId) {
         this.URL = "jdbc:derby://localhost:1527/CRM";
-        this.accountName = accountName;
+        this.accountId = accountId;
     }
-    
-    // Constructor accepts accountName and URL
-    public DeleteAccountDatabase(String accountName, String URL) {
+
+    // Constructor accepts accountId and URL
+    public DeleteAccountDatabase(int accountId, String URL) {
         this.URL = URL;
-        this.accountName = accountName;
-    }    
+        this.accountId = accountId;
+    }
 
     @Override
     public void execute() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        Scanner userinput = new Scanner(System.in);
+        System.out.println("Enter accountId to delete: ");
+        setAccountId(userinput.nextInt());
+
+        delete();
+    }
+
+    public void delete() {
+        try {
+            // Load Derby's network client driver
+            Class.forName("org.apache.derby.jdbc.ClientDriver").newInstance();
+        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Establish connection to given database URL
+        try (Connection connect = DriverManager.getConnection(URL);) {
+
+            String deleteString = "DELETE FROM Account WHERE accountID="
+                    + this.accountId;
+            PreparedStatement ps = connect.prepareStatement(deleteString);
+            ps.executeUpdate();
+
+            connect.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String getURL() {
@@ -38,11 +69,17 @@ public class DeleteAccountDatabase implements MenuItem {
         this.URL = URL;
     }
 
-    public String getAccountName() {
-        return accountName;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
+
+    @Override
+    public String toString() {
+        return "Delete Account from Database";
+    }
+
 }
